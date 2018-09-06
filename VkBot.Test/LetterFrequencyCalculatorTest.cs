@@ -6,6 +6,7 @@ using VkBot.Infrastructure;
 namespace VkBot.Test
 {
     [TestClass]
+    [TestCategory("Letter frequency")]
     public class LetterFrequencyCalculatorTest
     {
         /// <summary>
@@ -16,15 +17,15 @@ namespace VkBot.Test
         [TestMethod]
         public void GetLetterFrequencyTest()
         {
-            var texts = new List<string> { "aaaa", "bbb", "abc", "cc" };
+            var texts = new List<string> { "AAaa", "bBb", "abc", "cc" };
 
             ILetterFrequencyCalculator calculator = new LetterFrequencyCalculator();
             var output = calculator.GetLetterFrequency(texts);
 
             Assert.AreEqual(3, output.Count);
-            Assert.AreEqual(output['a'], (double) 5 / 12);
-            Assert.AreEqual(output['b'], (double) 4 / 12);
-            Assert.AreEqual(output['c'], (double) 3 / 12);
+            Assert.AreEqual(output['a'], Math.Round((double) 5 / 12, 5));
+            Assert.AreEqual(output['b'], Math.Round((double) 4 / 12, 5));
+            Assert.AreEqual(output['c'], Math.Round((double) 3 / 12, 5));
         }
     }
 }

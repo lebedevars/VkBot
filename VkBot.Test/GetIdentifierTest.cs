@@ -55,11 +55,15 @@ namespace VkBot.Test
         public void TryGetIdFromCorrectGroupIdentifier()
         {
             const string GROUP_ID = "club1234";
+            const string PUBLIC_ID = "public1254";
 
             var parsed = Helpers.Parser.TryGetId(GROUP_ID, out long id);
+            var pubParsed = Helpers.Parser.TryGetId(PUBLIC_ID, out long pubId);
 
             Assert.IsTrue(parsed);
             Assert.AreEqual(-1234, id);
+            Assert.IsTrue(pubParsed);
+            Assert.AreEqual(-1254, pubId);
         }
 
         /// <summary>
@@ -74,16 +78,19 @@ namespace VkBot.Test
             const string CASE_2 = "group123id";
             const string CASE_3 = "aaagroup123";
             const string CASE_4 = "123group123";
+            const string CASE_5 = "123public123";
 
             var case1 = Helpers.Parser.TryGetId(CASE_1, out long id);
             var case2 = Helpers.Parser.TryGetId(CASE_2, out id);
             var case3 = Helpers.Parser.TryGetId(CASE_3, out id);
             var case4 = Helpers.Parser.TryGetId(CASE_4, out id);
+            var case5 = Helpers.Parser.TryGetId(CASE_5, out id);
 
             Assert.IsFalse(case1);
             Assert.IsFalse(case2);
             Assert.IsFalse(case3);
             Assert.IsFalse(case4);
+            Assert.IsFalse(case5);
         }
     }
 }

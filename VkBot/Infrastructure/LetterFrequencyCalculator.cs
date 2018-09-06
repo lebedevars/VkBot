@@ -14,18 +14,18 @@ namespace VkBot.Infrastructure
             var sb = new StringBuilder();
             foreach (var text in texts)
             {
-                sb.Append(new string(text.Where(char.IsLetter).ToArray()));
+                sb.Append(new string(text.Where(char.IsLetter).Select(char.ToLower).ToArray()));
             }
 
             double charCount = sb.Length;
-            var frequencies = sb.ToString().GroupBy(l => l).Select(g => new { Character = g.Key, Count = g.Count()});
+            var frequencies = sb.ToString().GroupBy(l => l).Select(g => new { Character = g.Key, Count = g.Count()}).OrderBy(freq => freq.Character);
             foreach (var freq in frequencies)
             {
                 var key = freq.Character;
                 if (output.ContainsKey(key))
-                    output[key] += freq.Count / charCount;
+                    output[key] += Math.Round(freq.Count / charCount, 5);
                 else
-                    output.Add(freq.Character, freq.Count / charCount);
+                    output.Add(freq.Character, Math.Round(freq.Count / charCount, 5));
             }
             return output;
         }

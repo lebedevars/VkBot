@@ -4,8 +4,26 @@ namespace VkBot.Infrastructure
 {
     public interface IVkManager
     {
-        void Authorize();
+        /// <summary>
+        /// Авторизация ВКонтакте.
+        /// Требуется указать нужные параметры в App.config.
+        /// </summary>
+        /// <param name="password"></param>
+        void Authorize(string password);
 
-        IEnumerable<string> GetLastPosts(string identifier, int postsCount);
+        /// <summary>
+        /// Получение последних postsCount постов по идентификатору.
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="postsCount"></param>
+        /// <returns></returns>
+        IEnumerable<string> GetLastPosts(string identifier);
+
+        /// <summary>
+        /// Отправка сообщения на стену.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        long Post(string text);
     }
 }

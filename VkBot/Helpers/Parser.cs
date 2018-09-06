@@ -16,14 +16,14 @@ namespace VkBot.Helpers
         {
             longId = 0;
 
-            var match = Regex.Match(identifier, @"^(id|club)([\d]{1,})$");
+            var match = Regex.Match(identifier, @"^(id|club|public)([\d]{1,})$");
             if (!match.Success)
                 return false;
 
             // 3 группы: группа 0 - все вместе, 1 - слово, 2 - цифра
             longId = long.Parse(match.Groups[2].Value);
             var idType = match.Groups[1].Value;
-            if (idType == "club")
+            if (idType != "id")
                 longId = -longId;
 
             return true;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VkBot.Helpers;
 using VkNet.Abstractions;
@@ -14,30 +15,32 @@ namespace VkBot.Infrastructure
 
         public VkManager(IVkApi vkApi)
         {
-            _vkApi = vkApi;
+            _vkApi = vkApi ?? throw new ArgumentNullException(nameof(vkApi));
         }
         
         /// <summary>
         /// Авторизация ВКонтакте.
         /// </summary>
-        public void Authorize()
+        public void Authorize(string password)
         {
             _vkApi.Authorize(new ApiAuthParams
             {
-                ApplicationId = 6683623,
-                Login = "",
-                Password = "",
+                ApplicationId = Configuration.AppId,
+                Login = Configuration.Login,
+                Password = password,
                 Settings = Settings.All
             });
+            if (!_vkApi.IsAuthorized)
+                throw new Exception("Ошибка авторизации");
         }
 
         /// <summary>
-        /// Получение последних postsCount постов со страницы пользователя / группы.
+        /// Получение последних postsCount постов со страницы пользователя/группы.
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="postsCount"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetLastPosts(string identifier, int postsCount = 5)
+        public IEnumerable<string> GetLastPosts(string identifier)
         {
             var searchParams = new WallGetParams();
 
@@ -47,7 +50,21 @@ namespace VkBot.Infrastructure
                 searchParams.Domain = identifier;
 
             var wall = _vkApi.Wall.Get(searchParams);
-            return wall.WallPosts.OrderByDescending(post => post.Date).Take(5).Select(p => p.Text).ToList();
+            return wall.WallPosts.OrderByDescending(post => post.Date).Take(Configuration.PostCount).Select(p => p.Text).ToList();
+        }
+
+        /// <summary>
+        /// Отправляет пост на стену.
+        /// Пользователь/группа определяется настройкой PostTo.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public long Post(string text)
+        {
+            if (Parser.TryGetId(Configuration.PostTo, out long id))
+                return _vkApi.Wall.Post(new WallPostParams { OwnerId = id, Message = text });
+
+            throw new Exception("Не удалось распознать id группы для отправки сообщения на стену");
         }
     }
 }
