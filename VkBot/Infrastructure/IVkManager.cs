@@ -15,7 +15,6 @@ namespace VkBot.Infrastructure
         /// Получение последних postsCount постов по идентификатору.
         /// </summary>
         /// <param name="identifier"></param>
-        /// <param name="postsCount"></param>
         /// <returns></returns>
         IEnumerable<string> GetLastPosts(string identifier);
 

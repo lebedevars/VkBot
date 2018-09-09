@@ -38,14 +38,15 @@ namespace VkBot.Infrastructure
         /// Получение последних postsCount постов со страницы пользователя/группы.
         /// </summary>
         /// <param name="identifier"></param>
-        /// <param name="postsCount"></param>
         /// <returns></returns>
         public IEnumerable<string> GetLastPosts(string identifier)
         {
             var searchParams = new WallGetParams();
 
+            // если передан цифровой идентификатор - ищем по нему
             if (Parser.TryGetId(identifier, out long longId))
                 searchParams.OwnerId = longId;
+            // иначе - по короткому адресу
             else
                 searchParams.Domain = identifier;
 
@@ -62,9 +63,9 @@ namespace VkBot.Infrastructure
         public long Post(string text)
         {
             if (Parser.TryGetId(Configuration.PostTo, out long id))
-                return _vkApi.Wall.Post(new WallPostParams { OwnerId = id, Message = text });
+                return _vkApi.Wall.Post(new WallPostParams {OwnerId = id, Message = text});
 
-            throw new Exception("Не удалось распознать id группы для отправки сообщения на стену");
+            throw new Exception("Не удалось распознать id для отправки сообщения на стену");
         }
     }
 }

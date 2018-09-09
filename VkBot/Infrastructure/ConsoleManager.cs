@@ -34,7 +34,7 @@ namespace VkBot.Infrastructure
 
         public string GetTargetIdentifier()
         {
-            Console.Write("Введите идентификатор пользователя/группы: ");
+            Console.Write("Введите идентификатор пользователя/группы (пустая строка - выход): ");
             return Console.ReadLine();
         }
 

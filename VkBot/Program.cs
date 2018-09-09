@@ -38,7 +38,6 @@ namespace VkBot
 
                     identifier = _console.GetTargetIdentifier();
                 } 
-
             }
             catch (Exception e)
             {
@@ -53,11 +52,8 @@ namespace VkBot
         /// <param name="freqAsText"></param>
         private void MakePost(string identifier, string freqAsText)
         {
-            var postId = _vkManager.Post($"{identifier}, статистика для последних {Configuration.PostCount} постов:\r\n{freqAsText}");
-            if (postId != 0)
-                _console.Output($"Сообщение со статистикой отправлено на стену (id = {Configuration.PostTo}).");
-            else
-                _console.Output($"Ошибка отправки сообщения на стену (id = {Configuration.PostTo}).");
+            _vkManager.Post($"{identifier}, статистика для последних {Configuration.PostCount} постов:\r\n{freqAsText}");
+            _console.Output($"Сообщение со статистикой отправлено на стену (id = {Configuration.PostTo}).");
         }
 
         /// <summary>
